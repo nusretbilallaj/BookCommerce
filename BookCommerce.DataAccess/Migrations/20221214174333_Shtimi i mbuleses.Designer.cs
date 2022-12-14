@@ -4,6 +4,7 @@ using BookCommerce.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookCommerce.DataAccess.Migrations
 {
     [DbContext(typeof(Konteksti))]
-    partial class KontekstiModelSnapshot : ModelSnapshot
+    [Migration("20221214174333_Shtimi i mbuleses")]
+    partial class Shtimiimbuleses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,23 +42,6 @@ namespace BookCommerce.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Kategoria");
-                });
-
-            modelBuilder.Entity("BookCommerce.Model.Mbulesa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Emri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Mbulesa");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

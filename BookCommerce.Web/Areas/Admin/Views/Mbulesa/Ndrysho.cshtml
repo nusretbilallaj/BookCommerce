@@ -1,0 +1,24 @@
+﻿@model BookCommerce.Model.Mbulesa
+
+<form method="post">
+    <div class="border p-4 mt-4">
+        <div class="row">
+            <h2>Ndryshimi i mbulesave</h2>
+        </div>
+        <input type="hidden" asp-for="Id"/>
+        <div class="mb-2">
+            <label asp-for="Emri"></label>
+            <input asp-for="Emri" class="form-control"/>
+            <span asp-validation-for="Emri"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Ndrysho</button>
+        <a asp-controller="Mbulesa" asp-action="Listo" class="btn btn-secondary">Kthehu</a>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
