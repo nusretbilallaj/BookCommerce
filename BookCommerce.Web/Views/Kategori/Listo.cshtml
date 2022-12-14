@@ -1,11 +1,21 @@
 ﻿@using BookCommerce.Model
 @model List<BookCommerce.Model.Kategoria>
+
+@if (TempData["suksesi"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["suksesi"]');
+    </script>
+}
+
 <div class="container">
     <div class="row">
         <div class="col-6">
             <h1 class="text-primary">Kategorite</h1>
         </div>
-        <div class="col-6">
+        <div class="col-6 text-end">
             <a asp-controller="Kategori" asp-action="Krijo" class="btn btn-primary">Shto</a>
         </div>
     </div>
