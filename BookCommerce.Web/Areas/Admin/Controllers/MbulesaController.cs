@@ -1,4 +1,5 @@
 ﻿using BookCommerce.DataAccess;
+using BookCommerce.DataAccess.Repository.IRepository;
 using BookCommerce.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,15 +7,16 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
 {
     public class MbulesaController : Controller
     {
-        private readonly Konteksti _kon;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MbulesaController(Konteksti kon)
+
+        public MbulesaController(IUnitOfWork unitOfWork)
         {
-            _kon = kon;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Listo()
         {
-            List<Mbulesa> mbulesat = _kon.Mbulesat.ToList();
+            List<Mbulesa> mbulesat = _unitOfWork.Mbulesa.GetAll().ToList();
             return View(mbulesat);
         }
 
@@ -28,8 +30,8 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _kon.Mbulesat.Add(mbulesa);
-                _kon.SaveChanges();
+                _unitOfWork.Mbulesa.Add(mbulesa);
+                _unitOfWork.Save();
                 TempData["suksesi"] = "U shtua me sukses";
                 return RedirectToAction("Listo");
             }
@@ -44,7 +46,7 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Mbulesa mbulesa = _kon.Mbulesat.Find(id);
+            Mbulesa mbulesa = _unitOfWork.Mbulesa.GetFirstOrDefault(x=>x.Id==id);
 
             if (mbulesa == null)
             {
@@ -57,8 +59,8 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _kon.Mbulesat.Update(mbulesa);
-                _kon.SaveChanges();
+                _unitOfWork.Mbulesa.Update(mbulesa);
+                _unitOfWork.Save();
                 TempData["suksesi"] = "U ndryshua me sukses";
                 return RedirectToAction("Listo");
             }
@@ -72,7 +74,7 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Mbulesa mbulesa = _kon.Mbulesat.Find(id);
+            Mbulesa mbulesa = _unitOfWork.Mbulesa.GetFirstOrDefault(x=>x.Id==id);
 
             if (mbulesa == null)
             {
@@ -89,13 +91,13 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
             }
 
             Mbulesa mbulesaPrejDb
-                = _kon.Mbulesat.Find(id);
+                = _unitOfWork.Mbulesa.GetFirstOrDefault(x=>x.Id==id);
             if (mbulesaPrejDb == null)
             {
                 return NotFound();
             }
-            _kon.Mbulesat.Remove(mbulesaPrejDb);
-            _kon.SaveChanges();
+            _unitOfWork.Mbulesa.Remove(mbulesaPrejDb);
+            _unitOfWork.Save();
             TempData["suksesi"] = "U fshi me sukses";
             return RedirectToAction("Listo");
         }

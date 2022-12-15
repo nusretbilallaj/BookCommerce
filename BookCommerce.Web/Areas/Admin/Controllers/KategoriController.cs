@@ -1,4 +1,5 @@
 ﻿using BookCommerce.DataAccess;
+using BookCommerce.DataAccess.Repository.IRepository;
 using BookCommerce.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,15 +7,15 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
 {
     public class KategoriController : Controller
     {
-        private readonly Konteksti _kon;
-
-        public KategoriController(Konteksti kon)
+     
+        private readonly IUnitOfWork _unitOfWork;
+        public KategoriController(IUnitOfWork unitOfWork)
         {
-            _kon = kon;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Listo()
         {
-            List<Kategoria> kategorite = _kon.Kategorite.ToList();
+            List<Kategoria> kategorite = _unitOfWork.Kategoria.GetAll().ToList();
             return View(kategorite);
         }
 
@@ -28,8 +29,8 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _kon.Kategorite.Add(kat);
-                _kon.SaveChanges();
+                _unitOfWork.Kategoria.Add(kat);
+                _unitOfWork.Save();
                 TempData["suksesi"] = "U shtua me sukses";
                 return RedirectToAction("Listo");
             }
@@ -44,7 +45,7 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Kategoria kat = _kon.Kategorite.Find(id);
+            Kategoria kat = _unitOfWork.Kategoria.GetFirstOrDefault(x=>x.Id==id);
 
             if (kat == null)
             {
@@ -57,8 +58,8 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _kon.Kategorite.Update(kat);
-                _kon.SaveChanges();
+                _unitOfWork.Kategoria.Update(kat);
+                _unitOfWork.Save();
                 TempData["suksesi"] = "U ndryshua me sukses";
                 return RedirectToAction("Listo");
             }
@@ -72,7 +73,7 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Kategoria kat = _kon.Kategorite.Find(id);
+            Kategoria kat = _unitOfWork.Kategoria.GetFirstOrDefault(x=>x.Id==id);
 
             if (kat == null)
             {
@@ -88,13 +89,13 @@ namespace BookCommerce.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Kategoria katePrjDb = _kon.Kategorite.Find(id);
+            Kategoria katePrjDb = _unitOfWork.Kategoria.GetFirstOrDefault(x=>x.Id==id);
             if (katePrjDb == null)
             {
                 return NotFound();
             }
-            _kon.Kategorite.Remove(katePrjDb);
-            _kon.SaveChanges();
+            _unitOfWork.Kategoria.Remove(katePrjDb);
+            _unitOfWork.Save();
             TempData["suksesi"] = "U fshi me sukses";
             return RedirectToAction("Listo");
         }

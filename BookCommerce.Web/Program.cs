@@ -1,4 +1,6 @@
 using BookCommerce.DataAccess;
+using BookCommerce.DataAccess.Repository;
+using BookCommerce.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<Konteksti>(op=>op.UseSqlServer(
     builder.Configuration.GetConnectionString("Lidhja")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
